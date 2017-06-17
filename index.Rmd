@@ -1,0 +1,33 @@
+---
+title: "Enjoyment Rating of Cities Where I've Lived"
+author: "Nicolaas Kuit"
+date: "June 16, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+```
+
+Below is a map of the world which features cities where I've lived at least 2 years, and my overall enjoyment rating of each city (out of 10).
+The **highest ranked** city is highlighted in **green**.
+
+```{r, warning=FALSE, message=FALSE}
+cities <- data.frame(name = c("Johannesburg", "Vancouver", "London", "Sydney", "Toronto"),
+                     enjoymentLevel = c(8, 9, 7, 8, 6),
+                     lat = c(-26.182104, 49.288179,51.509633,-33.865745, 43.649315),
+                     lng = c(28.039488, -123.128712,-0.123466, 151.208724, -79.382247))
+
+cities %>%
+    leaflet() %>%
+    addTiles() %>%
+    addCircleMarkers(weight = 1, 
+                     radius = cities$enjoymentLevel, 
+                     popup = paste("<b>", 
+                                   cities$name, 
+                                   "</b><br>Enjoyment Rating: <b>", 
+                                   cities$enjoymentLevel, 
+                                   "</b> out of 10"),
+                     color = ifelse(cities$enjoymentLevel >=9, "green", "blue"))
+```
